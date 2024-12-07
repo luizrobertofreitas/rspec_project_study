@@ -1,0 +1,15 @@
+FROM public.ecr.aws/docker/library/ruby:3.2.2-alpine3.19
+
+ENV BUILD_PACKAGES build-base ruby-dev
+ENV DEV_PACKAGES bash
+
+RUN apk update && apk upgrade && apk add --update $DEV_PACKAGES
+
+RUN apk add --update $BUILD_PACKAGES
+
+RUN apk add librdkafka-dev
+
+# App specifics
+RUN echo ":ssl_verify_mode: 0" >> ~/.gemrc
+RUN gem update --system 3.5.14
+RUN gem install rdkafka
